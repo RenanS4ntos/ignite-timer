@@ -1,21 +1,12 @@
-import { Cycle } from '../pages/Home'
+import { Cycle } from '../../pages/Home'
+import { ActionsTypes } from './actions'
 
 interface CyclesState {
   cycles: Cycle[]
   activeCycleId: string | null
 }
-export enum ActionsTypes {
-  ADD_NEW_CYCLE = 'ADD_NEW_CYCLE',
-  INTERRUPT_CURRENT_CYCLE = 'INTERRUPT_CURRENT_CYCLE',
-  MARK_CURRENT_CYCLE_AS_FINISHED = 'MARK_CURRENT_CYCLE_AS_FINISHED',
-}
 
-interface CyclesAction {
-  type: ActionsTypes
-  payload: any
-}
-
-export function CyclesReducer(state: CyclesState, action: CyclesAction) {
+export function CyclesReducer(state: CyclesState, action: any) {
   switch (action.type) {
     case ActionsTypes.ADD_NEW_CYCLE:
       return {
@@ -27,7 +18,7 @@ export function CyclesReducer(state: CyclesState, action: CyclesAction) {
       return {
         ...state,
         cycles: state.cycles.map((cycle) => {
-          if (cycle.id === action.payload.activeCycleId) {
+          if (cycle.id === state.activeCycleId) {
             return { ...cycle, interruptedDate: new Date() }
           } else {
             return cycle
@@ -39,7 +30,7 @@ export function CyclesReducer(state: CyclesState, action: CyclesAction) {
       return {
         ...state,
         cycles: state.cycles.map((cycle) => {
-          if (cycle.id === action.payload.acriveCycleId) {
+          if (cycle.id === state.activeCycleId) {
             return { ...cycle, finishedDate: new Date() }
           } else {
             return cycle

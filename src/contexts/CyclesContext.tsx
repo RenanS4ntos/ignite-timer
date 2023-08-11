@@ -6,7 +6,12 @@ import {
   useReducer,
 } from 'react'
 import { Cycle } from '../pages/Home'
-import { ActionsTypes, CyclesReducer } from '../reducers/cycles'
+import { CyclesReducer } from '../reducers/cycles/reducer'
+import {
+  addNewCycleAction,
+  interruptCurrentCycleCycleAction,
+  markCurrentCycleAsFinishedAction,
+} from '../reducers/cycles/actions'
 
 interface CreateCycleForm {
   task: string
@@ -42,12 +47,7 @@ export function CycleContextProvider({ children }: CycleContextProviderProps) {
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId)
 
   function markCurrentCycleAsFinished() {
-    dispatch({
-      type: ActionsTypes.MARK_CURRENT_CYCLE_AS_FINISHED,
-      payload: {
-        activeCycleId,
-      },
-    })
+    dispatch(markCurrentCycleAsFinishedAction())
   }
 
   function handleSetAmountSecondsPast(amountSeconds: number) {
@@ -62,19 +62,13 @@ export function CycleContextProvider({ children }: CycleContextProviderProps) {
       startDate: new Date(),
     }
 
-    dispatch({
-      type: ActionsTypes.ADD_NEW_CYCLE,
-      payload: { newCycle },
-    })
+    dispatch(addNewCycleAction(newCycle))
 
     setAmountSecondsPast(0)
   }
 
   function interruptCurrentCycle() {
-    dispatch({
-      type: ActionsTypes.INTERRUPT_CURRENT_CYCLE,
-      payload: { activeCycleId },
-    })
+    dispatch(interruptCurrentCycleCycleAction())
   }
 
   return (
